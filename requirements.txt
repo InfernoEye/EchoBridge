@@ -5,5 +5,5 @@ scipy>=1.14,<2
 sounddevice>=0.5,<1
 argostranslate>=1.10,<2
 # Dev/build
-pytest>=8,<10
+pytest>=9.2.0,<10
 pyinstaller>=6,<7
