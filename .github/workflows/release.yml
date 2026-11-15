@@ -1,0 +1,93 @@
+name: Build and publish Windows release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows-release:
+    runs-on: windows-2022
+    timeout-minutes: 90
+    steps:
+      - name: Check out EchoBridge
+        uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Validate release version
+        shell: pwsh
+        run: |
+          $version = (Get-Content VERSION.txt -Raw).Trim()
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "v$version") {
+            throw "Tag $env:GITHUB_REF_NAME must match VERSION.txt ($version)."
+          }
+          "ECHOBRIDGE_VERSION=$version" >> $env:GITHUB_ENV
+      - name: Install Python dependencies
+        shell: pwsh
+        run: |
+          python -m venv .venv
+          & '.\.venv\Scripts\python.exe' -m pip install --upgrade pip
+          & '.\.venv\Scripts\python.exe' -m pip install -r requirements.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Dependency installation failed.' }
+      - name: Ensure Inno Setup is installed
+        shell: pwsh
+        run: |
+          $locations = @(
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 6\ISCC.exe",
+            "${env:ProgramFiles(x86)}\Inno Setup 7\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 7\ISCC.exe"
+          )
+          if (-not (@($locations | Where-Object { Test-Path $_ }).Count)) {
+            choco install innosetup --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { throw 'Inno Setup installation failed.' }
+          }
+      - name: Verify Start Menu shortcut is included
+        shell: pwsh
+        run: |
+          $iss = Get-Content 'release_tools/EchoBridge.iss' -Raw
+          if ($iss -notmatch [regex]::Escape('Name: "{autoprograms}\EchoBridge\EchoBridge"')) {
+            throw 'Installer is missing the required EchoBridge Start Menu shortcut.'
+          }
+      - name: Build installer and test frozen worker
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File '.\release_tools\build_release.ps1'
+          if ($LASTEXITCODE -ne 0) { throw 'Windows build failed.' }
+      - name: Create portable archive
+        shell: pwsh
+        run: |
+          $version = $env:ECHOBRIDGE_VERSION
+          $out = "releases\EchoBridge-Windows-Portable-$version.zip"
+          Compress-Archive -Path 'dist\EchoBridge\*' -DestinationPath $out -CompressionLevel Optimal -Force
+          if (-not (Test-Path $out)) { throw 'Portable ZIP missing.' }
+          $setup = "releases\EchoBridge-Setup-$version.exe"
+          if (-not (Test-Path $setup)) { throw "Installer missing: $setup" }
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: EchoBridge-Windows-${{ github.run_number }}
+          path: |
+            releases/EchoBridge-Setup-*.exe
+            releases/EchoBridge-Windows-Portable-*.zip
+          if-no-files-found: error
+          retention-days: 14
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $version = $env:ECHOBRIDGE_VERSION
+          $setup = "releases\EchoBridge-Setup-$version.exe"
+          $portable = "releases\EchoBridge-Windows-Portable-$version.zip"
+          gh release create $tag $setup $portable --title "EchoBridge $version" --generate-notes --verify-tag
+          if ($LASTEXITCODE -ne 0) { throw 'GitHub Release upload failed.' }

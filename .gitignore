@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# Windows build artifacts
+build/
+dist/
+releases/
+*.spec
+release_tools/echobridge.ico
+
+# Downloaded AI models, native runtimes, local audio
+models/
+runtimes/
+downloads/
+*.gguf
+*.safetensors
+*.onnx
+*.pt
+*.wav
+*.mp3
+*.mp4
+*.zip
+
+# Local user data, logs and diagnostics
+logs/
+recordings/
+history.json
+settings.json
+*.db
+*.sqlite*
+*.log
+*.tmp
+*.bak
+*.backup
+*debug*.txt
+Wklejony*.txt
+backup*/
+Backup*/
+EchoBridge-Backup*/
+.github-publisher-backups/
+github_tools/.initialized
+
+# Credentials / secrets
+secrets.json
+credentials.json
+token.json
+api_keys.json
+*.pem
+*.pfx
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Publisher assets are local-only, scripts stay tracked
+github_tools/templates/
