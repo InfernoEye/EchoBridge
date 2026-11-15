@@ -1,10 +1,24 @@
 version: 2
+
 updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "scipy"
+        versions:
+          - ">=1.18.0"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
