@@ -82,7 +82,7 @@ def test_normal_mode_keeps_prepared_stream_stopped():
 
 
 def test_recording_path_precedes_heavy_ui_and_model_checks():
-    code=(ROOT/'echobridge_runtime.py').read_text()
+    code=(ROOT/'echobridge_runtime.py').read_text(encoding='utf-8')
     tree=ast.parse(code)
     runtime=next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name=='EchoBridgeRuntime')
     method=next(n for n in runtime.body if isinstance(n, ast.FunctionDef) and n.name=='on_pressed')

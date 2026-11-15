@@ -1,4 +1,4 @@
-EchoBridge 0.5.1 — Windows installer build
+﻿EchoBridge 0.5.2 â€” Windows installer build
 
 Developer: open PowerShell in the extracted clean V3 source directory.
 
@@ -8,7 +8,7 @@ Developer: open PowerShell in the extracted clean V3 source directory.
   powershell -NoProfile -ExecutionPolicy Bypass -File .\release_tools\build_release.ps1
 
 Success outputs:
-  releases\EchoBridge-Setup-0.5.1.exe (installer)
+  releases\EchoBridge-Setup-0.5.2.exe (installer)
   dist\EchoBridge\EchoBridge.exe (portable; keep _internal folder alongside)
 
 The setup installer is a single EXE for end users. The first launch presents

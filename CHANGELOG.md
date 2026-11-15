@@ -1,8 +1,13 @@
-# Changelog
+﻿# Changelog
+
+## [0.5.2] — Maintenance release
+
+- Updated EchoBridge Windows build and release.
+
 
 All notable user-facing changes are recorded here. The project is under active Windows-first development.
 
-## [0.5.1] — Initial GitHub release
+## [0.5.1] â€” Initial GitHub release
 
 - Push-to-talk recording and offline translation workflow.
 - Configurable source and target languages, microphone and hotkey.

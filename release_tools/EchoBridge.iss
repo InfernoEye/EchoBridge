@@ -1,5 +1,5 @@
-#define MyAppName "EchoBridge"
-#define MyAppVersion "0.5.1"
+﻿#define MyAppName "EchoBridge"
+#define MyAppVersion "0.5.2"
 #define MyAppExeName "EchoBridge.exe"
 
 [Setup]
