@@ -75,7 +75,8 @@ def test_transcription_result_parser_preserves_manual_language():
 
 
 def test_release_can_package_new_pages():
-    build = (ROOT / 'release_tools' / 'build_release.ps1').read_text()
+    build = (ROOT / 'release_tools' / 'build_release.ps1').read_text(encoding='utf-8')
     assert "'echobridge_translation_ui'" in build
     assert "'echobridge_tasks'" in build
-    assert 'EchoBridge-Setup-0.5.1.exe' in build
+    version = (ROOT / 'VERSION.txt').read_text(encoding='utf-8').strip()
+    assert f'EchoBridge-Setup-{version}.exe' in build

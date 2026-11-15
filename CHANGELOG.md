@@ -1,5 +1,10 @@
 ﻿# Changelog
 
+## [0.5.3] — Maintenance release
+
+- Updated EchoBridge Windows build and release.
+
+
 ## [0.5.2] — Maintenance release
 
 - Updated EchoBridge Windows build and release.

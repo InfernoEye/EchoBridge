@@ -123,7 +123,7 @@ if (-not $compiler) {
 if (-not $compiler) { throw 'Could not locate ISCC.exe. Portable EXE is already built.' }
 & $compiler (Join-Path $PSScriptRoot 'EchoBridge.iss')
 if ($LASTEXITCODE -ne 0) { throw 'Inno Setup compilation failed. Portable EXE is already built.' }
-$setup = Join-Path $project 'releases\EchoBridge-Setup-0.5.2.exe'
+$setup = Join-Path $project 'releases\EchoBridge-Setup-0.5.3.exe'
 if (-not (Test-Path $setup)) { throw 'Installer output missing.' }
 Write-Host ''
 Write-Host 'SUCCESS! EchoBridge installer:' -ForegroundColor Green
