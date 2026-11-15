@@ -6,4 +6,4 @@ sounddevice>=0.5,<1
 argostranslate>=1.10,<2
 # Dev/build
 pytest>=8,<10
-pyinstaller>=6,<7
+pyinstaller>=6.22.3,<7
